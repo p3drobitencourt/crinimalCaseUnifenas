@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { addSuspectAction } from '@/app/actions/suspects'
+import Link from 'next/link'
+import { Lock } from 'lucide-react'
 
 export default function SuspectEntryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -31,7 +33,19 @@ export default function SuspectEntryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 flex items-center justify-center p-6 font-sans">
+    <main className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 font-sans relative">
+      
+      {/* Botão discreto para o Painel Admin */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <Link 
+          href="/hq-admin/login" 
+          className="flex items-center gap-2 text-zinc-600 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-widest border border-zinc-800 hover:border-red-900/50 bg-zinc-900/50 px-3 py-2 rounded-lg backdrop-blur-sm"
+        >
+          <Lock size={14} />
+          Acesso Restrito
+        </Link>
+      </div>
+
       <form 
         onSubmit={handleSubmit} 
         className="w-full max-w-lg bg-zinc-900 border border-zinc-800 p-8 rounded-xl shadow-2xl flex flex-col gap-6"
