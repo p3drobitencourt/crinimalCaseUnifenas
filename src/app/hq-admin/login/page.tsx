@@ -28,59 +28,73 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center font-sans">
-      <div className="max-w-md mx-auto w-full">
-        <div className="bg-[#1a1a1a] p-8 border-4 border-neutral-700 shadow-2xl relative overflow-hidden text-neutral-300 font-mono">
-          {/* CRT Scanline effect */}
-          <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-10" />
-          
-          <div className="flex flex-col items-center mb-8 relative z-20">
-            <div className="bg-red-600 p-4 rounded-full mb-4">
-              <Lock size={32} className="text-white" />
+    <main className="min-h-screen bg-zinc-950 flex items-center justify-center p-6 font-sans">
+      <form 
+        onSubmit={handleLogin} 
+        className="w-full max-w-lg bg-zinc-900 border border-zinc-800 p-8 rounded-xl shadow-2xl flex flex-col gap-6"
+      >
+        <div className="text-center border-b border-zinc-800 pb-4 mb-2">
+          <div className="flex justify-center mb-4">
+            <div className="bg-red-600/20 p-4 rounded-full border border-red-900/50">
+              <Lock size={32} className="text-red-600" />
             </div>
-            <h2 className="text-2xl font-black uppercase tracking-widest text-white">Acesso à Central</h2>
-            <p className="text-red-500 font-bold text-sm mt-1 uppercase">Área Restrita (Supabase Auth)</p>
           </div>
-
-          <form onSubmit={handleLogin} className="flex flex-col gap-6 relative z-20">
-            <div className="flex flex-col gap-2">
-              <label className="uppercase text-xs font-bold tracking-widest text-neutral-400">E-mail Operacional</label>
-              <input 
-                type="email" 
-                name="email"
-                required
-                className="bg-black border border-neutral-600 p-3 text-green-500 font-mono outline-none focus:border-green-500 text-center tracking-widest"
-                placeholder="agente@departamento.gov"
-                autoFocus
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="uppercase text-xs font-bold tracking-widest text-neutral-400">Senha de Acesso</label>
-              <input 
-                type="password" 
-                name="password"
-                required
-                className="bg-black border border-neutral-600 p-3 text-green-500 font-mono outline-none focus:border-green-500 text-center tracking-[0.5em]"
-                placeholder="••••••••"
-              />
-            </div>
-            
-            {error && (
-              <div className="flex items-center gap-2 text-red-500 bg-red-950/50 p-2 border border-red-900 justify-center font-bold text-sm">
-                <AlertTriangle size={16} /> {error}
-              </div>
-            )}
-
-            <button 
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-neutral-800 text-white font-bold uppercase tracking-widest py-3 hover:bg-neutral-700 transition-colors border border-neutral-600 focus:bg-green-700 focus:border-green-500 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Verificando...' : 'Autenticar'}
-            </button>
-          </form>
+          <h1 className="text-3xl font-extrabold text-red-600 uppercase tracking-widest">
+            Acesso Restrito
+          </h1>
+          <p className="text-zinc-400 mt-2 text-sm font-bold uppercase tracking-wider">
+            Painel do Administrador
+          </p>
         </div>
-      </div>
-    </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-zinc-300 font-bold uppercase text-sm tracking-wider">
+            Identificação (E-mail)
+          </label>
+          <input 
+            type="email" 
+            name="email"
+            required 
+            className="bg-zinc-950 border border-zinc-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-red-600 focus:outline-none transition-all placeholder:text-zinc-600"
+            placeholder="admin@departamento.com"
+            autoFocus
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-zinc-300 font-bold uppercase text-sm tracking-wider">
+            Senha de Acesso
+          </label>
+          <input 
+            type="password" 
+            name="password"
+            required 
+            className="bg-zinc-950 border border-zinc-700 text-white rounded-lg p-3 focus:ring-2 focus:ring-red-600 focus:outline-none transition-all placeholder:text-zinc-600 tracking-[0.3em]"
+            placeholder="••••••••"
+          />
+        </div>
+        
+        {error && (
+          <div className="flex items-center gap-2 text-red-400 bg-red-950/50 p-3 rounded-lg border border-red-900 justify-center font-bold text-sm">
+            <AlertTriangle size={18} /> {error}
+          </div>
+        )}
+
+        <button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="mt-4 bg-red-600 hover:bg-red-700 disabled:bg-zinc-700 disabled:text-zinc-400 text-white font-bold py-4 px-6 rounded-lg uppercase tracking-widest transition-all disabled:cursor-not-allowed flex justify-center items-center shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+        >
+          {isSubmitting ? (
+            <span className="flex items-center gap-2">
+              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Autenticando...
+            </span>
+          ) : (
+            'Entrar no Sistema'
+          )}
+        </button>
+      </form>
+    </main>
   )
 }

@@ -80,6 +80,7 @@ export default function SuspectEntryPage() {
             id="photo" 
             name="photo" 
             accept="image/*" 
+            capture="environment"
             required 
             className="bg-zinc-950 border border-zinc-700 text-zinc-400 rounded-lg p-2 
                        file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 
