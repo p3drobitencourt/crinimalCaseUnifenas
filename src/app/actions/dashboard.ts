@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function getDashboardData() {
-  const supabase = createClient()
+  const supabase = await createClient()
   
   const { data: sentences, error: err1 } = await supabase
     .from('sentences')
@@ -28,7 +28,7 @@ export async function getDashboardData() {
 }
 
 export async function addSentenceAction(description: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from('sentences').insert({ description })
   if (error) return { error: error.message }
   revalidatePath('/hq-admin')
@@ -36,7 +36,7 @@ export async function addSentenceAction(description: string) {
 }
 
 export async function updateSentenceAction(id: string, description: string, is_active: boolean) {
-  const supabase = createClient()
+  const supabase = await createClient()
   // No script SQL criamos apenas description e id, wait!
   // The SQL script for sentences didn't have is_active!
   // Let me check my sql script. Wait, "description text not null". No is_active!
@@ -48,7 +48,7 @@ export async function updateSentenceAction(id: string, description: string, is_a
 }
 
 export async function deleteSentenceAction(id: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from('sentences').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/hq-admin')
@@ -56,7 +56,7 @@ export async function deleteSentenceAction(id: string) {
 }
 
 export async function deleteSuspectAction(id: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   await supabase.from('draws').delete().eq('user_id', id)
   const { error } = await supabase.from('users').delete().eq('id', id)
   if (error) return { error: error.message }
@@ -65,7 +65,7 @@ export async function deleteSuspectAction(id: string) {
 }
 
 export async function drawJudgementAction(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   
   // Idempotency: verify if already drawn
   const { data: existing } = await supabase.from('draws').select('*, sentence:sentences(*)').eq('user_id', userId).single()

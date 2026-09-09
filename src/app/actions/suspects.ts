@@ -4,7 +4,7 @@ import { createClient, createAdminClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function addSuspectAction(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient()
   
   const name = formData.get('name') as string
   const course = formData.get('course') as string
@@ -45,7 +45,7 @@ export async function addSuspectAction(formData: FormData) {
   // 4. Fallback (Rollback) se a inserção falhar
   if (insertError) {
     // Usamos o Admin Client para ignorar a restrição de DELETE do RLS
-    const adminSupabase = createAdminClient()
+    const adminSupabase = await createAdminClient()
     await adminSupabase.storage
       .from('suspect-photos')
       .remove([filePath])
