@@ -57,9 +57,33 @@ export async function deleteSentenceAction(id: string) {
 
 export async function deleteSuspectAction(id: string) {
   const supabase = await createClient()
-  await supabase.from('draws').delete().eq('user_id', id)
-  const { error } = await supabase.from('users').delete().eq('id', id)
+  const { createAdminClient } = await import('@/utils/supabase/server')
+  const adminSupabase = await createAdminClient()
+
+  // Buscar URL da foto para deletar do storage depois
+  const { data: suspect } = await supabase.from('users').select('photo_url').eq('id', id).single()
+
+  // Deletar os vínculos
+  await adminSupabase.from('draws').delete().eq('user_id', id)
+  
+  // Deletar o usuário (bypassa RLS de DELETE)
+  const { error } = await adminSupabase.from('users').delete().eq('id', id)
   if (error) return { error: error.message }
+
+  // Excluir a foto do bucket
+  if (suspect && suspect.photo_url) {
+    try {
+      // Extrair o caminho correto do arquivo (ex: public/12345.png)
+      const pathParts = suspect.photo_url.split('/suspect-photos/')
+      if (pathParts.length > 1) {
+        const filePath = pathParts[1]
+        await adminSupabase.storage.from('suspect-photos').remove([filePath])
+      }
+    } catch (e) {
+      console.error('Falha ao excluir foto:', e)
+    }
+  }
+
   revalidatePath('/hq-admin')
   return { success: true }
 }
