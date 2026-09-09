@@ -1,0 +1,6 @@
+{
+  "name": "Criminal Case Roulette",
+  "description": "An investigation board styled full-stack application to sentence suspects via roulette.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

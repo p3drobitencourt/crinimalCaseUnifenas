@@ -1,0 +1,39 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  course    String
+  photo_url String
+  draws     Draw[]
+
+  @@map("users")
+}
+
+model Sentence {
+  id          String   @id @default(uuid())
+  description String
+  is_active   Boolean  @default(true)
+  draws       Draw[]
+
+  @@map("sentences")
+}
+
+model Draw {
+  id          String   @id @default(uuid())
+  user_id     String   @unique
+  sentence_id String
+  created_at  DateTime @default(now())
+
+  user        User     @relation(fields: [user_id], references: [id])
+  sentence    Sentence @relation(fields: [sentence_id], references: [id])
+
+  @@map("draws")
+}
